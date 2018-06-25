@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+         <title>{% block head_title %}Hazte Con Todo{% endblock %}</title>
+
+
+        <link rel="stylesheet" href='{% static "css/bootstrap.css" %}'>
+        <link rel="stylesheet" href='{% static "css/base.css" %}'>
+        {% block css_content %} {% endblock %}
+
+    </head>
+    <body>
+
+        <div class="wrapper">
+            <!-- Sidebar -->
+            <nav id="sidebar">
+                <div id="dismiss">
+                    <i class="glyphicon glyphicon-arrow-left"></i>
+                </div>
+
+                <div class="sidebar-header">
+                    <h3>Hazte con Todo</h3>
+                </div>
+
+                <ul class="list-unstyled components">
+
+                    <li class="active">
+                        <a href="#subastasSubmenu" data-toggle="collapse" aria-expanded="false">Subastas</a>
+                        <ul class="collapse list-unstyled" id="subastasSubmenu">
+                            <li><a href="/haztecontodo/crear/">Crear una subasta</a></li>
+                            <li><a href="/haztecontodo/ordenar/chollos/">Lo más barato</a></li>
+                            <li><a href="/haztecontodo/ordenar/ultimas/">Ultima oportunidad</a></li>
+                            <li><a href="/haztecontodo/ordenar/foto/">Solo con foto</a></li>
+                        </ul>
+                    </li>
+
+                    <li>
+
+                        <a href="#userSubmenu" data-toggle="collapse" aria-expanded="false">Mi zona</a>
+                        <ul class="collapse list-unstyled" id="userSubmenu">
+                            {% if not request.user.is_authenticated %}
+                                <li><a href="/accounts/signup"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
+                                <li><a href="/accounts/login"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+                            {% else %}
+                                <li><a href="/usuarios/editarperfil/{{ request.user.username }}">Editar perfil</a></li>
+                                <li class="active">
+                                    <a href="#misubastasSubmenu" data-toggle="collapse" aria-expanded="false">Mis Subastas</a>
+                                    <ul class="collapse list-unstyled" id="misubastasSubmenu" style="padding-left:1em;">
+                                        <li><a  href="/haztecontodo/missubastas/ocultas">Subastas sin publicar</a></li>
+                                        <li><a href="/haztecontodo/missubastas/publicas">Subastas activas</a></li>
+                                        <li><a href="/haztecontodo/missubastas/finalizadas">Subastas finalizadas</a></li>
+                                    </ul>
+                                </li>
+
+                                <li><a href="/haztecontodo/mispujas">Mis pujas</a></li>
+                            {% endif %}
+                        </ul>
+
+                        <a href="#smallSubmenu" data-toggle="collapse" aria-expanded="false" class="hidden-lg hidden-md">Acciones</a>
+                        <ul class="collapse list-unstyled" id="smallSubmenu">
+
+                            <li><a href="/haztecontodo/"><span class="glyphicon glyphicon-home"></span>&nbsp;Inicio</a></li>
+                            {% if request.user.is_authenticated %}
+                                 <li><a href="/accounts/logout/?next=/haztecontodo/"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+                            {% endif %}
+                            <li><form id="busqueda2" name="busqueda" method="POST" action="/haztecontodo/buscar/">
+                                    {% csrf_token %}
+                                    <div class="input-group">
+                                        <input type="text" id="condicion2" name="condicion" class="form-control" placeholder="Buscar">
+                                        <div class="input-group-btn">
+                                          <button class="btn btn-default" type="submit">
+                                            <i class="glyphicon glyphicon-search"></i>
+                                          </button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <br> <br>
+
+                    <li><a>Contacto</a></li>
+                    <li><a href="">Sobre Nosotros</a></li>
+
+
+                </ul>
+
+            </nav>
+
+            <!-- Content -->
+            <div id="content">
+
+                <nav class="navbar navbar-default">
+                    <div class="container-fluid">
+
+                        <div class="navbar-header">
+                            <button type="button" id="sidebarCollapse" class="btn btn-info navbar-btn">
+                                <i class="glyphicon glyphicon-align-left"></i>
+                            </button>
+                        </div>
+
+                        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+
+                            {% if request.user.is_authenticated %}
+                                <ul class="nav navbar-nav navbar-right">
+                                    <li><a href="/accounts/logout/?next=/haztecontodo/"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+                                </ul>
+                            {% else %}
+                                <ul class="nav navbar-nav navbar-right">
+                                    <li><a href="/accounts/signup"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
+                                    <li><a href="/accounts/login"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+                                </ul>
+                            {% endif %}
+
+                            <form id="busqueda" name="busqueda" method="POST" class="navbar-form navbar-right hidden-xs " action="/haztecontodo/buscar/">
+                                {% csrf_token %}
+                                <div class="input-group">
+                                    <input type="text" id="condicion" name="condicion" class="form-control" placeholder="Buscar">
+                                    <div class="input-group-btn">
+                                      <button class="btn btn-default" type="submit">
+                                        <i class="glyphicon glyphicon-search"></i>
+                                      </button>
+                                    </div>
+                                </div>
+                            </form>
+
+
+                            <ul class="nav navbar-nav hidden-xs hidden-md hidden-sm" style="padding-left:30em;" >
+                                <li><a href="/haztecontodo/"><b><big>HAZTE CON TODO</big></b></a></li>
+                            </ul>
+
+                        </div>
+
+
+                    </div>
+                </nav>
+
+                {% if messages %}
+                    <div class="alert alert-info alert-dismissible fade in">
+                        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                        {% include "mensajes.html" %}
+                    </div>
+                {% endif %}
+
+                <hr>
+
+                <!-- Block content -->
+                <div class="container">
+
+                    {% block content %}{% endblock content %}
+                </div>
+
+            </div>
+        </div>
+
+
+        <div class="overlay"></div>
+
+
+
+
+
+        <script src='{% static "js/jquery.min.js" %}'></script>
+        <script src='{% static "js/bootstrap.js" %}'></script>
+        <!-- jQuery Custom Scroller -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.concat.min.js"></script>
+        <script src='{% static "js/base.js" %}'></script>
+
+        <div class="container">
+            {% block javascript %}
+            {% endblock javascript %}
+        </div>
+
+    </body>
+</html>

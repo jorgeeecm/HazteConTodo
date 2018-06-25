@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block head_title %}Eliminar subasta {% endblock %}
+
+{% block content %}
+
+<h2>¿Seguro que quiere eliminar la subasta {{ subasta.titulo }}?</h2>
+
+<form method="POST" action="/conf-el/">
+    {% csrf_token %}
+    <input type="submit" value="Eliminar subasta" />
+</form>
+
+{% endblock content %}
+

@@ -1,0 +1,12 @@
+{% extends "account/base.html" %}
+
+{% load i18n %}
+
+{% block head_title %}{% trans "Verify Your E-mail Address" %}{% endblock %}
+
+{% block content %}
+    <h2>{% trans "Verificación de su dirección de correo" %}</h2>
+
+    <p>{% blocktrans %}Le hemos enviado una confirmación a su e-mail. Siga los pasos indicados para completar el registro. Contacte con nosotros si no lo recibe en unos minutos.{% endblocktrans %}</p>
+
+{% endblock %}

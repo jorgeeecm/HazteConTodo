@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+
+{% block head_title %}Eliminar subasta {% endblock %}
+
+{% load static %}
+
+{% block css_content %}
+<link rel="stylesheet" href='{% static "css/home.css" %}'>
+{% endblock %}
+
+{% block content %}
+
+    <h2 align="center">Estas son sus subastas {{ opcion }}</h2>
+    <br>
+
+    <div class="row">
+
+        {%for obj in subastas %}
+           <div class="col-lg-4 col-md-6 col-sm-6" style="height:400px;">
+                <div class="card h-100">
+
+                    {% if not obj.tiene_img %}
+
+                        <a href="{{ obj.get_absolute_url }}"><img class="img-responsive center-block"  src='{% static "img/noimage.jpg" %}' style="height:120px; width:120px;" ></a>
+
+                    {% else %}
+
+                        <a href="{{ obj.get_absolute_url }}"><img class="img-responsive center-block" src="{{ obj.imagenes.first.thumbnail.url }}" style="height:120px; width:120px;"></a>
+
+                    {% endif %}
+
+                    <div class="card-body" align="center" style="height:120px;">
+                        <h4 class="card-title">
+                            <a href='{{ obj.get_absolute_url }}'>{{ obj.titulo }}</a>
+                        </h4>
+                        <h5>{{ obj.precio }}€</h5>
+                        <p class="card-text">{{ obj.descripcion | linebreaks }}</p>
+                    </div>
+
+                </div>
+
+
+            </div>
+        {% endfor %}
+
+    </div>
+
+    <br><br>
+
+    <div align="center">
+        <div class="pagination" >
+            <span class="step-links">
+                {% if subastas.has_previous %}
+                    <a href="?page={{ subastas.previous_page_number }}">previous</a>
+                {% endif %}
+
+                <span class="current">
+                    Page {{ subastas.number }} of {{ subastas.paginator.num_pages }}.
+                </span>
+
+                {% if subastas.has_next %}
+                    <a href="?pagina={{ subastas.next_page_number }}">next</a>
+                {% endif %}
+            </span>
+        </div>
+    </div>
+{% endblock content %}

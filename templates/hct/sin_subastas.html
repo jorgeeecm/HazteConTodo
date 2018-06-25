@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block head_title %}Eliminar subasta {% endblock %}
+
+{% block content %}
+
+<div align="center">
+    <h2>No tiene subastas {{ opcion }}, puede consultar las que tiene en los otros estados o crear una nueva</h2>
+    <br>
+
+    <div class="row">
+
+            <div class="col-lg-3 col-md-1 mb-1"></div>
+            {% if opcion == "ocultas" %}
+
+                <div class="col-lg-3 col-md-2 mb-2">
+                    <a href="/haztecontodo/missubastas/publicas/"> <botton class="btn btn-info">Subastas Públicas</botton> </a>
+                </div>
+                <div class="col-lg-3 col-md-2 mb-2" align="center">
+                    <a href="/haztecontodo/missubastas/finalizadas/"> <botton class="btn btn-info">Subastas Finalizadas</botton> </a>
+                </div>
+
+            {% endif %}
+            {% if opcion == "publicas" %}
+
+                <div class="col-lg-3 col-md-2 mb-2">
+                    <a href="/haztecontodo/missubastas/ocultas/"> <botton class="btn btn-info">Subastas Ocultas</botton> </a>
+                </div>
+                <div class="col-lg-3 col-md-2 mb-2" align="center">
+                    <a href="/haztecontodo/missubastas/finalizadas/"> <botton class="btn btn-info">Subastas Finalizadas</botton> </a>
+                </div>
+
+            {% endif %}
+            {% if opcion == "finalizadas" %}
+
+                <div class="col-lg-3 col-md-2 mb-2">
+                    <a href="/haztecontodo/missubastas/ocultas/"> <botton class="btn btn-info">Subastas Ocultas</botton> </a>
+                </div>
+                <div class="col-lg-3 col-md-2 mb-2" align="center">
+                    <a href="/haztecontodo/missubastas/publicas/"> <botton class="btn btn-info">Subastas Públicas</botton> </a>
+                </div>
+
+            {% endif %}
+    </div>
+            <br><br>
+            <div class="col-lg-4 col-md-4 mb-4"></div>
+            <div class="col-lg-4 col-md-3 mb-3">
+                 <a href="/haztecontodo/crear/"> <botton class="btn btn-success">Crear Subasta</botton> </a>
+            </div>
+</div>
+
+{% endblock content %}

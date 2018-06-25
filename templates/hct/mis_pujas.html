@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block head_title %}Mis Pujas{% endblock %}
+
+{% load static %}
+
+{% block css_content %}
+<link rel="stylesheet" href='{% static "css/mis_pujas.css" %}'>
+{% endblock %}
+
+{% block content %}
+
+    {% if not pujas %}
+        <h2 align="center">No tiene ninguna puja</h2>
+    {% else %}
+        <h2 align="center">Estas son sus pujas en Subastas</h2>
+        <br>
+
+        <div class="container">
+
+            {%for obj in pujas %}
+                <div class="col-lg-4 col-md-6 col-sm-6" style="height:400px;">
+                    <div class="card h-100">
+
+                        {% if not obj.tiene_img %}
+
+                            <a href="{{ obj.get_absolute_url }}"><img class="img-responsive center-block"  src='{% static "img/noimage.jpg" %}' style="height:120px; width:120px;" ></a>
+
+                        {% else %}
+
+                            <a href="{{ obj.get_absolute_url }}"><img class="img-responsive center-block" src="{{ obj.imagenes.first.thumbnail.url }}" style="height:120px; width:120px;"></a>
+
+                        {% endif %}
+                        <div class="card-body" align="center" style="height:120px;">
+                            <h4 class="card-title">
+                                <a href='{{ obj.get_absolute_url }}'>{{ obj.titulo }}</a>
+                            </h4>
+                            <br>
+                            {% if request.user == obj.maxpujador %}
+                                <h5>Usted es el máximo pujador en esta subasta</h5>
+                            {% else %}
+                                <h6>Su puja ha sido superada por otro usuario</h6>
+                            {% endif %}
+                        </div>
+
+                    </div>
+
+
+                 </div>
+            {% endfor %}
+        </div>
+
+    {% endif %}
+
+{% endblock content %}
+
+
+

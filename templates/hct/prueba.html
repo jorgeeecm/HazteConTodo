@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% load urlify %}
+
+{% block head_title %} {{ subasta.titulo }} | {{ block.super }} {% endblock %}
+
+{% block content %}
+{% load static %}
+
+
+<div align="center">
+    <h2>{{ subasta.titulo }}</h2>
+</div>
+    <br><br>
+<div id="principal">
+
+    <input hidden id="slug" value="{{ subasta.slug }}">
+        <div class="col-lg-5 col-md-6" align="center">
+
+            {% if subasta.estado == "publicado" %}
+            <p><b>Tiempo restante:</b> <class id="tiempo">{{ tiempo }}</class></p>
+            {% endif %}
+        </div>
+
+        <div class="col-lg-5 col-md-4" align="center">
+            <div class="panel panel-warning">
+                <div class="panel-heading">Puja actual</div>
+                <div class="panel-body" id="precio">
+                    {{ precio }}
+                </div>
+            </div>
+        </div>
+</div>
+
+
+
+
+{% endblock content %}
+
+{% block javascript %}
+    <script src='{% static "js/prueba.js" %}'></script>
+{% endblock javascript %}

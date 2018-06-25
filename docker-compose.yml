@@ -1,0 +1,40 @@
+version: '3'
+
+services:
+    nginx:
+        image: nginx:alpine
+        ports:
+            - "80:80"
+            - "443:443"
+        volumes:
+            - ./conf:/etc/nginx/conf.d:ro
+            - ./cert:/etc/ssl/private:ro
+            - ./static:/static
+            - .:/media_cdn
+        depends_on:
+            - web
+
+    db:
+        image: postgres
+        environment:
+            POSTGRES_PASSWORD: admin
+            POSTGRES_USER: django
+            POSTGRES_DB: tfg
+            DATABASE_URL: postgres://django:admin@db:5432/tfg
+        ports:
+            - "5432:5432"
+        
+    web:
+        build: .
+        command: gunicorn -b:8000 haztecontodo.wsgi
+        #command: python manage.py runserver 0.0.0.0:8000
+        volumes:
+            - .:/code
+            - .:/media_cdn
+            - .:/static_cdn
+        ports:
+            - "8000:8000"
+        links:
+            - db
+        depends_on:
+            - db

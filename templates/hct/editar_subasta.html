@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+{% load static %}
+{% block head_title %}Editar subasta {% endblock %}
+
+{% block content %}
+{% load static %}
+
+<div align="center">
+
+    <h2>Editar Subasta</h2>
+
+    <form method="POST" name="form1" id="form1" action="" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <p><b>Titulo</b>: {{ form.titulo }}</p>
+        <p><b>Precio</b>: {{ form.precio }}</p>
+
+        <p><b>Imagenes:</b> <input type="file" id="file-input" accept="image/png, image/jpeg" name="input-file" multiple/></p>
+        <p>Actuales:</p>
+        <div align="center" class="gallery" id="actuales">
+            {% for img in imagenes%}
+                <img src="{{ img }}">
+            {% endfor %}
+        </div>
+
+        <p>Nuevas: </p>
+            <div align="center" class="gallery" id="preview"></div>
+
+        <br> <hr>
+
+        <p><b>Descripción</b>: {{ form.descripcion }}</p>
+
+        <br>
+        <p><b>TIEMPO QUE DURARÁ LA SUBASTA ACTIVA:</b>
+            <br><small>Sólo es necesario a la hora de la publicación</small></p>
+
+            <p>DÍAS:<input type="number" name="dias" id="dias" value="0" min="0" onChange="enableBtn()">
+                 HORAS:<input type="number" id="horas" name="horas"  value="0" min="0" onchange="enableBtn()"></p>
+
+
+        <br>
+
+        <input type="submit" class="btn btn-info" name="guardar" value="Guardar Cambios" />
+        <button type="button" class="btn btn-success" name="publicar" id="publicar" data-toggle="modal" data-target="#myModal" disabled>Publicar Subasta </button>
+        <!-- Modal -->
+          <div class="modal fade" id="myModal" role="dialog">
+            <div class="modal-dialog">
+
+              <!-- Modal content-->
+              <div class="modal-content">
+                <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+                  <h4 class="modal-title">Publicar</h4>
+                </div>
+                <div class="modal-body">
+                    <p>Asegurese de que ha añadido las fotos que quería y <strong>HA ESTABLECIDO LA DURACIÓN DESEADA PARA LA SUBASTA.</strong></p>
+                    <p><b><big>RECUERDE QUE NO PODRÁ VOLVER A EDITAR LA SUBASTA O ELIMINARLA SI SE HACE PÚBLICA.</big></b></p>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                  <input type="submit" class="btn btn-success" value="Publicar Subasta" name="publicar"/>
+                </div>
+              </div>
+
+            </div>
+          </div>
+    </form>
+</div>
+
+{% endblock content %}
+
+{% block javascript %}
+    <script src='{% static "js/editar_subasta.js" %}'></script>
+    <script src='{% static "js/imagenes.js" %}'></script>
+{% endblock javascript %}

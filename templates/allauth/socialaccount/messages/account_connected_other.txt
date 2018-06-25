@@ -1,0 +1,2 @@
+{% load i18n %}
+{% blocktrans %}Esa cuenta ya está conectada a otra cuenta en el sistema.{% endblocktrans %}

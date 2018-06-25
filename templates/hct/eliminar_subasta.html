@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block head_title %}Eliminar subasta {% endblock %}
+
+{% block content %}
+<div align="center">
+    <h2>¿Seguro que quiere eliminar la subasta: <i>{{ subasta.titulo }}</i>?</h2>
+    <br>
+   <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#myModal">Eliminar Subasta</button>
+
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Eliminar Subasta</h4>
+                </div>
+                <div class="modal-body">
+                    <p>¿Está seguro de que quiere eliminar esta subasta?.</p>
+                    <p><b><big>ATENCIÓN: UNA VEZ ELIMINADA DEL SISTEMA NO PODRÁ RECUPERARLA.</big></b></p>
+                </div>
+                <div class="modal-footer">
+                    <form action="/haztecontodo/{{ subasta.slug }}/eliminar/conf" >
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                        <input type="submit" class="btn btn-danger" value="Eliminar"/>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

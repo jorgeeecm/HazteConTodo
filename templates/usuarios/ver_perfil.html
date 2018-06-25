@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block head_title %}Perfil de usuario{% endblock %}
+
+{% load static %}
+
+{% block content %}
+
+    <h2 align="center">Perfil de {{ profile.usuario.username }}</h2>
+    <br>
+
+    <div align="center">
+        {% if profile.avatar %}
+            <img src="{{ profile.avatar_thumb.url }}" class="img-circle">
+        {% else %}
+            <img class="img-circle" src='{% static "img/noimage.jpg" %}' style="height:96px; width:96px" alt="No hay imagenes disponibles">
+        {% endif %}
+
+         <p><strong>{{ profile.usuario.first_name }} {{ profile.usuario.last_name }}</strong></p>
+
+    </div>
+    <p><strong><big>De: </big></strong>
+        {% if profile.localidad %}
+            {{ profile.localidad }}
+            {% if profile.comunidad %}
+                , {{ profile.comunidad }}
+            {% endif %}
+        {% else %}
+            {% if profile.comunidad %}
+                {{ profile.comunidad }}
+            {% endif %}
+        {% endif %}
+    </p>
+    <br>
+    <div class="panel panel-primary">
+        <div class="panel-heading"><b>Descripcion:</b></div>
+        <div class="panel-body"> {{ profile.descripcion | linebreaks }}</div>
+    </div>
+
+    {% if request.user == profile.usuario %}
+        <a href="/usuarios/editarperfil/{{ profile.usuario.username }}"> <button class="btn btn-success">Editar</button></a>
+    {% endif %}
+{% endblock content %}

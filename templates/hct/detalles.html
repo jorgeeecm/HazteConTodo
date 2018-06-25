@@ -1,0 +1,190 @@
+{% extends "base.html" %}
+{% load urlify %}
+
+{% block head_title %} {{ subasta.titulo }} | {{ block.super }} {% endblock %}
+
+{% block content %}
+{% load static %}
+
+<div align="center">
+    <h2>{{ subasta.titulo }}</h2>
+</div>
+<input hidden id="slug" value="{{ subasta.slug }}"/>
+
+    <br><br>
+<div class="container" id="principal">
+
+    <div class="row">
+        <div class="col-lg-7 col-md-5">
+            {% if not subasta.tiene_img %}
+
+                <img class="img-responsive center-block" src='{% static "img/noimage.jpg" %}' alt="No hay imagenes disponibles">
+
+            {% else %}
+
+                <div id="myCarousel" class="carousel slide" data-ride="carousel" style="width:90%;" align="center">
+
+                    <!-- Indicators -->
+
+                    <ol class="carousel-indicators">
+                        {% for i in urls%}
+                            {% if i == urls.0 %}
+                                <li data-target="#myCarousel" data-slide-to="{{ loop.index0 }}" class="active"></li>
+                            {% else %}
+                                <li data-target="#myCarousel" data-slide-to="{{ loop.index0 }}"></li>
+                            {% endif %}
+                        {% endfor %}
+
+                    </ol>
+
+                    <!-- Wrapper for slides -->
+                    <div class="carousel-inner">
+                        {% for i in urls%}
+                            {% if i == urls.0 %}
+                                <div class="item active">
+                                    <img src="{{ i }}" alt="" style="height:300px;">
+                                </div>
+                            {% else %}
+                                <div class="item">
+                                    <img src="{{ i }}" alt="" style="height:300px;">
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+
+
+                    </div>
+
+                    <!-- Left and right controls -->
+                    <a class="left carousel-control" href="#myCarousel" data-slide="prev">
+                        <span class="glyphicon glyphicon-chevron-left"></span>
+                        <span class="sr-only">Previous</span>
+                    </a>
+                    <a class="right carousel-control" href="#myCarousel" data-slide="next">
+                        <span class="glyphicon glyphicon-chevron-right"></span>
+                        <span class="sr-only">Next</span>
+                    </a>
+                </div>
+             {% endif %}
+
+
+        </div>
+
+        <div class="col-lg-5 col-md-6" align="center">
+
+            {% if subasta.estado == "publicado" %}
+            <p><b>Tiempo restante:</b> <class id="tiempo"> {{ subasta.tiempo_restante }} </class></p>
+            {% endif %}
+        </div>
+
+        <div class="col-lg-5 col-md-4" align="center">
+            <div class="panel panel-warning">
+                <div class="panel-heading">Puja actual</div>
+                <div class="panel-body" id="precio">
+                    {{ subasta.precio }}
+                </div>
+            </div>
+        </div>
+
+        {% if not request.user == subasta.vendedor %}
+            {% if subasta.estado == "finalizado" %}
+                 <div class="col-lg-5 col-md-4" align="center">
+                    <div class="panel panel-primary">
+                        <div class="panel-heading"><b>Estado Actual:</b> {{ subasta.estado }}</div>
+                        <div class="panel-body">
+                            <p>La subasta ha finalizado, el ganador ha sido <b><big>{{ subasta.maxpujador }}</big></b></p>
+                        </div>
+                    </div>
+                 </div>
+            {% else %}
+                 <div class="col-lg-5 col-md-3 mb-3" align="center">
+                     <div class="panel panel-warning">
+                         <div class="panel-heading">Tu Puja</div>
+                         <div class="panel-body">
+                             <form method="POST" id="pujaform" name="pujaform" action="/haztecontodo/{{ subasta.slug }}/pujar/">
+                                 {% csrf_token %}
+                                 <p><input type="number" step="0.1" value="{{ subasta.precio }}" min="{{ subasta.precio }}" name="puja" id="puja" required></p>
+                                 <input type="submit" class="btn btn-success" value="Pujar"/>
+                             </form>
+                         </div>
+                     </div>
+                 </div>
+            {% endif %}
+        {% else %}
+        <div class="col-lg-5 col-md-3 mb-3" align="center">
+            <div class="panel panel-primary">
+                <div class="panel-heading"><b>Estado Actual:</b> {{ subasta.estado }}</div>
+                <div class="panel-body">
+                    {% if subasta.estado == "oculto" %}
+                        <button type="button" class="btn btn-success" data-toggle="modal" data-target="#myModal">Editar/Publicar Subasta</button>
+                        <a href="/haztecontodo/{{ subasta.slug }}/eliminar">
+                            <button type="button" class="btn btn-danger"  value="Eliminar">Eliminar Subasta</button>
+                        </a>
+                        <!-- Modal -->
+                        <div class="modal fade" id="myModal" role="dialog">
+                            <div class="modal-dialog">
+
+                              <!-- Modal content-->
+                              <div class="modal-content">
+                                <div class="modal-header">
+                                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                  <h4 class="modal-title">Editar/Publicar Subasta</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <p>A continuación pasará al último paso para tener su subasta pública.</p>
+                                    <p>Recuerde que una vez publicada ya no podrá eliminarla hasta que termine el tiempo que establezca,
+                                    sin embargó podra editarla y guardar los cambios todas las veces que quiera mientras no esté publicada.</p>
+                                </div>
+                                <div class="modal-footer">
+                                    <form action="/haztecontodo/{{ subasta.slug }}/editar" >
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                                        <input type="submit" class="btn btn-success" value="Editar/Publicar"/>
+                                    </form>
+                                </div>
+                              </div>
+                            </div>
+                        </div>
+                    {% else %}
+                        {% if subasta.estado == "publicado" %}
+                            <p><b>La subasta ha sido publicada, ya no puede ser editada</b></p>
+                        {% else %}
+                            <p><b>La subasta ha finalizado, el ganador ha sido {{ subasta.maxpujador }}</b></p>
+                        {% endif %}
+                    {% endif %}
+
+                </div>
+            </div>
+        </div>
+
+        {% endif %}
+    </div>
+</div>
+<!-- SEPARACIÓN -->
+<br><hr><br>
+
+<!-- DESCRIPCIÓN -->
+<div class="row">
+    <div class="col-lg-8 col-md-8 col-lg-offset-1 col-md-offset-1">
+        <div class="panel panel-info">
+            <div class="panel-heading">Descripción del producto:</div>
+            <div class="panel-body">
+                {{ subasta.descripcion | linebreaks }}
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-2 mb-2" align="center">
+
+        <p>Por: <a href="/usuarios/verperfil/{{ subasta.vendedor.username }}">{{ subasta.vendedor }}</a> </p>
+        {% if subasta.vendedor.perfil.avatar_thumb %}
+           <a href="/usuarios/verperfil/{{ subasta.vendedor.username }}">
+             <img class="img-circle" src="{{ subasta.vendedor.perfil.avatar_thumb.url }}">
+           </a>
+        {% endif %}
+    </div>
+</div>
+
+
+{% endblock content %}
+
+{% block javascript %}
+    <script src='{% static "js/detalles.js" %}'></script>
+{% endblock javascript %}

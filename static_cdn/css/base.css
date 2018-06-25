@@ -1,0 +1,22 @@
+h1 {
+    text-align: center;
+    font-size:400%;
+    background: #014;
+}
+
+h2 {
+    color: #bf8;
+    border-top: 1px dotted #fff;
+    margin-top: 2em;
+}
+
+body {
+    color: #efd;
+    background: #012;
+    padding: 0 5em;
+    margin:0;
+}
+
+p {
+    margin: 1em 0;
+}

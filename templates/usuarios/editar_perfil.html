@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block head_title %}Editar perfil{% endblock %}
+
+{% block content %}
+
+<div align="center">
+
+    <h2>Editar perfil de usuario</h2>
+
+    <form method="POST" action="" enctype="multipart/form-data">
+        {% csrf_token %}
+        <p><b>Nombre</b>: <input type="text" id="nombre" name="nombre" maxlength="30" value="{{ usuario.first_name}}"></p>
+        <p><b>Apellidos</b>: <input type="text" id="apellido" name="apellido" maxlength="150" value="{{ usuario.last_name}}"></p>
+        <p><b>Avatar:</b> <input type="file" id="file-input" accept="image/png, image/jpeg" name="input-file"/></p>
+        {% if usuario.perfil.avatar_thumb %}
+            <p>Antiguo:</p>
+            <img class="img-circle" src="{{ usuario.perfil.avatar_thumb.url }}">
+        {% endif %}
+        <p>Nuevo: </p>
+            <div align="center" class="gallery" id="preview"></div>
+
+
+        <br> <hr>
+        <p><b>Localidad:</b> {{ form.localidad }}</p>
+        <p><b>Comunidad:</b> {{ form.comunidad }}</p>
+        <p><b>Descripcion: </b>{{ form.descripcion }}</p>
+
+        <br>
+
+        <p><button type="button" class="btn btn-success" data-toggle="modal" data-target="#myModal">Guardar cambios</button></p>
+        <!-- Modal -->
+          <div class="modal fade" id="myModal" role="dialog">
+            <div class="modal-dialog">
+
+              <!-- Modal content-->
+              <div class="modal-content">
+                <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+                  <h4 class="modal-title">Guardar perfil</h4>
+                </div>
+                <div class="modal-body">
+                    <p>¿Está seguro de que quiere actualizar su perfil con los siguiente datos?</p>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                  <input type="submit" class="btn btn-success" value="Guardar cambios"/>
+                </div>
+              </div>
+
+            </div>
+          </div>
+    </form>
+</div>
+
+{% endblock content %}
+
+{% block javascript %}
+    <script src='{% static "js/imagenes.js" %}'></script>
+{% endblock javascript %}
